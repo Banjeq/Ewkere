@@ -30,8 +30,42 @@ var bomb_image;
 var bullet_image;
 var fullHealth_image;
 var nullHealth_image;
-
 loadResources();
+
+
+
+function getMousePos(can, event) {
+    var rect = can.getBoundingClientRect();
+    return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+    };
+}
+
+function isInside(pos, rect){
+    return pos.x > rect.x && pos.x < rect.x+rect.width && pos.y < rect.y+rect.height && pos.y > rect.y
+}
+
+var rect = {
+    x:canvas.width/2-70,
+    y:350,
+    width:120,
+    height:45
+};
+can.addEventListener('click', function(evt) {
+	var mousePos = getMousePos(can, evt);
+	console.log(isInside(mousePos,rect))
+	if (isInside(mousePos,rect) && state1 == 2) {
+			newOverlay.counter = -1
+			player.state = "alive"
+			game.state = "start"
+	}else if (isInside(mousePos,rect) && state1 == 1){
+		game.state = "newGame1"
+		newOverlay.counter = 100;
+	} 
+}, false);
+
+
 
 function loadResources() {
 	ship_image = new Image();
@@ -265,7 +299,7 @@ function drawNewOverlay(c) {
 	var alpha = newOverlay.counter/50.0;
     if(alpha > 1) alpha = 1;
     c.globalAlpha = alpha;
-    if (state1 == 1){
+    if (state1 == 2){
 		if (cShip == 0){
 		c.drawImage(ship_image, 
 	    25,1, 23,23, //src coords
@@ -310,6 +344,37 @@ function drawNewOverlay(c) {
 	    400, 250, 80, 80);
 		}
 	}
+	if (state1 == 1){
+		c.beginPath();
+		c.rect(canvas.width/2-70, 345, 120, 45); 
+		c.fillStyle = 'white'; 
+		c.fillStyle = 'rgba(225,225,225,0.5)';
+		c.fill(); 
+		c.lineWidth = 2;
+		c.strokeStyle = 'white'; 
+		c.stroke();
+		c.closePath();
+		
+		c.font = '25pt Arial';
+		c.fillStyle = 'black';
+		c.fillText('Next', canvas.width/2-10, 380);
+	}
+	if (state1 == 2){
+		c.beginPath();
+		c.rect(canvas.width/2-70, 345, 120, 45); 
+		c.fillStyle = 'white'; 
+		c.fillStyle = 'rgba(225,225,225,0.5)';
+		c.fill(); 
+		c.lineWidth = 2;
+		c.strokeStyle = 'white'; 
+		c.stroke();
+		c.closePath();
+		
+		c.font = '25pt Arial';
+		c.fillStyle = 'black';
+		c.fillText('Start', canvas.width/2-10, 380);
+	}
+	
     c.save();
     c.fillStyle = "white";
     c.font = "Bold 30pt Arial";
@@ -418,7 +483,6 @@ function drawOverlay(c) {
     var alpha = overlay.counter/50.0;
     if(alpha > 1) alpha = 1;
     c.globalAlpha = alpha;
-    
     c.save();
     c.fillStyle = "white";
     c.font = "Bold 40pt Arial";
@@ -441,7 +505,7 @@ function drawOverlay(c) {
 }
 
 doSetup();
-setInterval(mainLoop,1000/30);
+setInterval(mainLoop,1000/((level*5)+30));
 
 
 

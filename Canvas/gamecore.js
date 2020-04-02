@@ -48,7 +48,7 @@ var player = {
 var ses = false
 var kek = false
 var sss = false 
-var cec = 0
+
 
 var keyboard = { };
 var playerBullets = [];
@@ -117,10 +117,6 @@ async function updateGame() {
 		newOverlay.counter = -1;
     }
 	
-	if(game.state == "newGame" && keyboard[32]) {
-		game.state = "newGame1"
-		newOverlay.counter = 100;
-	}
 	
 	if(game.state == "playing" && sss == false && gameTime == 0){
 		gameTime = setInterval(gameTick,1000);
@@ -170,14 +166,6 @@ async function updateGame() {
 			clearInterval(timer1)
 			timer1 = 0
 		}
-		if (keyboard[32] ){
-			cec += 1
-			if (keyboard[32] && cec == 4){
-				newOverlay.counter = -1
-				player.state = "alive"
-				game.state = "start"
-			}
-		}
 
 	}
 	
@@ -213,8 +201,10 @@ function updatePlayer() {
 	//space bar
 	if(keyboard[32]) {
 		if(!keyboard.fired) { 
-			firePlayerBullet(); 
-			keyboard.fired = true;
+			if (!health == 0){
+				firePlayerBullet(); 
+				keyboard.fired = true;
+			}
 		}
 		
 	} else {
@@ -275,8 +265,8 @@ function updateEnemies() {
 			newOverlay.controls2 = "A/left arrow - move left"
 			newOverlay.controls3 = "D/right arrow - move right"
 			newOverlay.controls4 = "space - shot | ESC - pause"
-			newOverlay.nextButton = "press space to continue"
-			
+			newOverlay.nextButton = ""
+			state1 = 1
 		
 	}
 	
@@ -288,8 +278,8 @@ function updateEnemies() {
 			newOverlay.controls2 = "A/left arrow | D/right arrow"
 			newOverlay.controls3 = ""
 			newOverlay.controls4 = ""
-			newOverlay.nextButton = "press space to start"
-			state1 = 1
+			newOverlay.nextButton = ""
+			state1 = 2
 			
 	}
 	
@@ -297,6 +287,7 @@ function updateEnemies() {
     if(game.state == "start") {
 		if (health == 0){
 			health = 3	
+			state1 = 0
 		}
         enemies = [];
         enemyBullets = [];
@@ -324,10 +315,11 @@ function updateEnemies() {
         //float back and forth when alive
         if(enemy && enemy.state == "alive") {
             enemy.counter++;
-            enemy.x += Math.sin(enemy.counter*Math.PI*2/100)*2;
+            enemy.x += Math.sin(enemy.counter*Math.PI*2/100);
             //fire a bullet every 50 ticks
             //use 'phase' so they don't all fire at the same time
-            if((enemy.counter + enemy.phase) % 200 == 0) {
+            if((enemy.counter + enemy.phase) % (100-(level*2)) == 0) {
+				console.log(game.state)
                 enemyBullets.push(createEnemyBullet(enemy));
             }
         }
@@ -357,7 +349,7 @@ function updateEnemyBullets() {
   if(!pause){	
     for(var i in enemyBullets) {
         var bullet = enemyBullets[i];
-        bullet.y += 2;
+		bullet.y += 1+level/2;
         bullet.counter++;
     }
   }	
