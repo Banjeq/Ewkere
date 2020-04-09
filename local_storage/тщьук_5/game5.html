@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Футбольный органайзео</title>
+    <style>
+      #calendar {
+        display: inline-block;
+      }
+
+      #calendar td,
+      #calendar th {
+        padding: 10px;
+        border: 1px solid black;
+        text-align: center;
+      }
+
+      #calendar .info {
+        text-align: center;
+      }
+
+      #calendar .prev {
+        float: left;
+        text-decoration: none;
+        font-size: 30px;
+      }
+
+      #calendar .next {
+        float: right;
+        text-decoration: none;
+        font-size: 30px;
+      }
+
+      .disabled {
+        color: gray;
+      }
+
+      .active {
+        background-color: red;
+      }
+
+      .complete {
+        text-decoration: line-through;
+        color: gray;
+      }
+    </style>
+  </head>
+  <body>
+	<div id = "calendar">
+      <div>
+        <a href="#" class="prev">&larr;</a>
+        <a href="#" class="next">&rarr;</a>
+      </div>
+      <div class="info">Май 2019</div>
+      <table>
+        <thead>
+          <tr>
+            <th>пн</th>
+            <th>вт</th>
+            <th>ср</th>
+            <th>чт</th>
+            <th>пт</th>
+            <th>сб</th>
+            <th>вс</th>
+          </tr>
+        </thead>
+        <tbody class="dates">
+        </tbody>
+      </table>
+    </div>
+    <div class="notes">
+    </div>
+    <script src="kall.js"></script>
+  </body>
+</html>
